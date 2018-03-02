@@ -1,0 +1,2 @@
+# aliddns
+Scripts for AliDDNS
