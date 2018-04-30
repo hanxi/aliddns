@@ -10,6 +10,7 @@ Scripts for AliDDNS
 
 # 如何用
 
+安装依赖： `opkg install curl openssl-util`
 下载文件：`wget https://raw.githubusercontent.com/hanxi/aliddns/master/aliddns`
 
 把 `aliddns` 文件放到 `/usr/bin/` 目录下
