@@ -50,22 +50,27 @@ resolve2ip() {
     echo -n $tmp_ip
 }
 
+log()
+{
+    logger -t aliddns $*
+}
+
 check_aliddns() {
-    echo "$DATE WAN-IP: ${ip}"
+    log "WAN-IP: ${ip}"
     if [ "Z$ip" == "Z" ]; then
-        echo "$DATE ERROR, cant get WAN-IP..."
+        log "ERROR, cant get WAN-IP..."
         return 0
     fi
     current_ip=$(resolve2ip "$sub_dm.$main_dm")
     if [ "Z$current_ip" == "Z" ]; then
         rrid='' # NO Resolve IP Means new Record_ID
     fi
-    echo "$DATE DOMAIN-IP: ${current_ip}"
+    log "DOMAIN-IP: ${current_ip}"
     if [ "Z$ip" == "Z$current_ip" ]; then
-        echo "$DATE IP dont need UPDATE..."
+        log "IP needn't UPDATE."
         return 0
     else
-        echo "$DATE UPDATING..."
+        log "UPDATING..."
         return 1
     fi
 }
@@ -107,20 +112,20 @@ do_ddns_record() {
     fi
     if [ "Z$rrid" == "Z" ]; then
         # failed
-        echo "$DATE # ERROR, Please Check SubDomain Exists."
+        log "ERROR, Please Check SubDomain Exists."
     else
         update_record $rrid >/dev/null 2>&1
-        echo "$DATE UPDATE record $rrid"
+        log "UPDATE record $rrid"
 
         # save rrid
-        echo "$rrid" > /tmp/rrid
-        echo "$DATE UPDATED($ip)"
+        log "$rrid" > /tmp/rrid
+        log "UPDATED($ip)"
     fi
 }
 
 
 [ -x /usr/bin/openssl -a -x /usr/bin/curl -a -x /bin/sed ] ||
-    ( echo "Need [ openssl + curl + sed ]" && exit 1 )
+    ( log "Need [ openssl + curl + sed ]" && exit 1 )
 
 rrid=$([ -f /tmp/rrid ] && cat /tmp/rrid)
 ip=$(intelnetip)
